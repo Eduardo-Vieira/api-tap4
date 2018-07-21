@@ -45,10 +45,15 @@ $app->post('/api/auth', function (Request $request, Response $response) {
             $token_from_db = $stmt->fetchObject();
             $db = null;
             if ($token_from_db) {
-                echo json_encode([
-                    "token"      => $token_from_db->tx_values,
-                    "tx_login" => $token_from_db->user_id
-                ]);
+                return $response->withJson(["code"=>200,
+                                            "data"=>[
+                                                "token"      => $token_from_db->tx_values,
+                                                "user_login" => $current_user->tx_login,
+                                                "date_created" => $token_from_db->date_created,
+                                                "date_expiration" => $token_from_db->date_expiration,
+                                                "id_user" => $token_from_db->id_user,],
+                                            "mensage"=>"sucesso!"
+                                            ]);
             }
         } catch (PDOException $e) {
             return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro na pesquisa do token"]);
@@ -73,20 +78,23 @@ $app->post('/api/auth', function (Request $request, Response $response) {
                 return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro ao gerar o token"]);
             }
             $sql = "INSERT INTO tb_tokens (id_user, tx_values, date_created, date_expiration)
-                        VALUES (:id_user, :tx_value, :date_created, :date_expiration)";
+                        VALUES (:id_user, :tx_values, :date_created, :date_expiration)";
             try {
                 $db = $this->db;
                 $stmt = $db->prepare($sql);
-                $stmt->bindParam("id_user", $current_user->id_user);
-                $stmt->bindParam("tx_values", $jwt);
-                $stmt->bindParam("date_created", $payload['iat']);
-                $stmt->bindParam("date_expiration", $payload['exp']);
+                $stmt->bindValue(":id_user", $current_user->id_user);
+                $stmt->bindValue(":tx_values", $jwt);
+                $stmt->bindValue(":date_created", $payload['iat']);
+                $stmt->bindValue(":date_expiration", $payload['exp']);
                 $stmt->execute();
                 $db = null;
                 return $response->withJson(["code"=>200,
                                             "data"=>[
                                                 "token"      => $jwt,
                                                 "user_login" => $current_user->tx_login],
+                                                "date_created" => $payload['iat'],
+                                                "date_expiration" => $payload['exp'],
+                                                "id_user" => $current_user->id_user,
                                             "mensage"=>"sucesso!"
                                             ]);
             } catch (PDOException $e) {
