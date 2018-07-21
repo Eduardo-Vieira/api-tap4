@@ -3,6 +3,8 @@
 
 $container = $app->getContainer();
 
+$container['key'] = "testeTap4api";
+
 // view renderer
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];

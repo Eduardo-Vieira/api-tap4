@@ -19,9 +19,9 @@ class LinguagensController {
 
     public function list($request, $response, $args) {
         $jwt = $request->getHeaders();
-        $key = "testeTap4api";
+       
         try {
-            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $key, array('HS256'));
+            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
         } catch (UnexpectedValueException $e) {
             return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
         }
@@ -53,7 +53,16 @@ class LinguagensController {
     }
 
     public function save($request, $response, $args) {
-
+        $jwt = $request->getHeaders();
+       
+        try {
+            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
+        } catch (UnexpectedValueException $e) {
+            return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
+        }
+        if (isset($decoded)) {
+            
+        }
     }
 
     
