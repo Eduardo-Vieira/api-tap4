@@ -18,9 +18,16 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
 // Authenticate api.
 $app->post('/api/auth', 'App\Controllers\AuthController:auth');
 
-// Lista de liguagens
+// rota liguagens
 $app->group('/api/linguagens', function() {
     $this->get('/list[/{id_liguagem}]','App\Controllers\LinguagensController:list');
     $this->post('/save/{type}','App\Controllers\LinguagensController:save');
     $this->delete('/delete/{id_liguagem}','App\Controllers\LinguagensController:delete');
+});
+
+// rota frameworks
+$app->group('/api/frameworks', function() {
+    $this->get('/list[/{id_liguagem}]','App\Controllers\FrameworksController:list');
+    $this->post('/save/{type}','App\Controllers\FrameworksController:save');
+    $this->delete('/delete/{id_liguagem}','App\Controllers\FrameworksController:delete');
 });
