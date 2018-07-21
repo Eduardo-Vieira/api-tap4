@@ -91,10 +91,10 @@ $app->post('/api/auth', function (Request $request, Response $response) {
                 return $response->withJson(["code"=>200,
                                             "data"=>[
                                                 "token"      => $jwt,
-                                                "user_login" => $current_user->tx_login],
+                                                "user_login" => $current_user->tx_login,
                                                 "date_created" => $payload['iat'],
                                                 "date_expiration" => $payload['exp'],
-                                                "id_user" => $current_user->id_user,
+                                                "id_user" => $current_user->id_user],
                                             "mensage"=>"sucesso!"
                                             ]);
             } catch (PDOException $e) {
@@ -104,31 +104,43 @@ $app->post('/api/auth', function (Request $request, Response $response) {
     }
 });
 
-// The route to get a secured data.
-$app->get('/api/restricted', function (Request $request, Response $response) {
-    $jwt = $request->getHeaders();
-    $key = "testeTap4api";
-    try {
-        $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $key, array('HS256'));
-    } catch (UnexpectedValueException $e) {
-        echo $e->getMessage();
-    }
-    if (isset($decoded)) {
-        $sql = "SELECT * FROM tb_tokens WHERE id_user = :id_user";
-        try {
-            $db = $this->db;
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam("id_user", $decoded->context->user->id_user);
-            $stmt->execute();
-            $user_from_db = $stmt->fetchObject();
-            $db = null;
-            if (isset($user_from_db->id_user)) {
-                echo json_encode([
-                    "response" => "This is your secure resource !"
-                ]);
-            }
-        } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
-    }
-});
+
+
+$app->get('/api/linguagens/list/[{id_liguagem}]','App\Controllers\LinguagensController:list');
+
+
+// // The route to get a secured data.
+// $app->get('/api/linguagens', function (Request $request, Response $response) {
+//     $jwt = $request->getHeaders();
+//     $key = "testeTap4api";
+//     try {
+//         $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $key, array('HS256'));
+//     } catch (UnexpectedValueException $e) {
+//         return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
+//     }
+//     if (isset($decoded)) {
+//         try {            
+//             $linguagens = new LinguagensModel($this->db);
+//             $data = $linguagens->pesquisar();
+
+//             return $response->withJson(["code"=>200,
+//                                         "data"=> $data,
+//                                         "mensage"=>"sucesso!"
+//                                         ]);
+
+//             // $db = $this->db;
+//             // $stmt = $db->prepare($sql);
+//             // $stmt->bindParam("id_user", $decoded->context->user->id_user);
+//             // $stmt->execute();
+//             // $user_from_db = $stmt->fetchObject();
+//             // $db = null;
+//             // if (isset($user_from_db->id_user)) {
+//             //     echo json_encode([
+//             //         "response" => "This is your secure resource !"
+//             //     ]);
+//             // }
+//         } catch (PDOException $e) {
+//             return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro de query"]);
+//         }
+//     }
+// });
