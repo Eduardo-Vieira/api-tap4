@@ -84,8 +84,44 @@ class LinguagensController {
         }
         if (isset($decoded)) {
             try {
-
-
+                $body = $request->getParsedBody();
+                // Insert
+                if($args['type'] == 'add'){
+                    $fieldNames = implode(',', array_keys($body));
+                    foreach ($body as $key => $value) {
+                        $fieldValues .= ":$key,";
+                    }                
+                    $fieldValues = rtrim($fieldValues, ',');                
+                    $sql = "INSERT INTO tb_liguagens ($fieldNames) VALUES ($fieldValues)";                
+                    $db = $this->container->db;
+                    $stmt = $db->prepare($sql);
+                    foreach ($body as $key => $value) {
+                        $stmt->bindValue(":$key", $value);
+                    }
+                    $data = $stmt->execute();
+                    $db = null;
+                }else{
+                    //update               
+                    ksort($body);
+                    $fieldDetails = null;
+                    foreach ($body as $key => $value) {
+                        $fieldDetails .= "$key=:$key,";
+                    }
+                    $fieldDetails = rtrim($fieldDetails, ',');
+                    $sql = "UPDATE tb_liguagens SET $fieldDetails WHERE id_liguagem=:id_liguagem";
+                    $db = $this->container->db;
+                    $stmt = $db->prepare($sql);
+                    foreach ($body as $key => $value) {
+                        $stmt->bindValue(":$key", $value);
+                    }
+                    $data = $stmt->execute();
+                    $db = null;
+                }
+                return $response->withJson(["code"=>200,
+                                            "data"=>   $sql,
+                                            "mensage"=>"Registro salvo com sucesso!",
+                                            "args" => $args
+                                            ]);
 
             } catch (PDOException $e) {
                 return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro de query"]);

@@ -21,6 +21,6 @@ $app->post('/api/auth', 'App\Controllers\AuthController:auth');
 // Lista de liguagens
 $app->group('/api/linguagens', function() {
     $this->get('/list[/{id_liguagem}]','App\Controllers\LinguagensController:list');
-    $this->post('/save','App\Controllers\LinguagensController:save');
+    $this->post('/save/{type}','App\Controllers\LinguagensController:save');
     $this->delete('/delete/{id_liguagem}','App\Controllers\LinguagensController:delete');
 });
