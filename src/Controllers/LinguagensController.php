@@ -49,22 +49,48 @@ class LinguagensController {
     }
     
     public function delete($request, $response, $args) {
-
-    }
-
-    public function save($request, $response, $args) {
-        $jwt = $request->getHeaders();
-       
+        $jwt = $request->getHeaders();       
         try {
             $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
         } catch (UnexpectedValueException $e) {
             return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
         }
         if (isset($decoded)) {
-            
+            try {
+                $sql = "DELETE FROM tb_liguagens WHERE id_liguagem = :id_liguagem";
+                $db = $this->container->db;
+                $stmt = $db->prepare($sql);  
+                $stmt->bindParam(":id_liguagem", $args['id_liguagem']);
+                $data = $stmt->execute();
+                $db = null;
+                return $response->withJson(["code"=>200,
+                                            "data"=>  $data,
+                                            "mensage"=>"Registro excluido com sucesso!",
+                                            "args" => $args
+                                            ]);
+
+            } catch (PDOException $e) {
+                return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro de query"]);
+            }
         }
     }
 
-    
+    public function save($request, $response, $args) {
+        $jwt = $request->getHeaders();       
+        try {
+            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
+        } catch (UnexpectedValueException $e) {
+            return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
+        }
+        if (isset($decoded)) {
+            try {
+
+
+
+            } catch (PDOException $e) {
+                return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro de query"]);
+            }
+        }
+    }
 
 }

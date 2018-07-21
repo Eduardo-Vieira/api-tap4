@@ -15,8 +15,12 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     return $this->renderer->render($response, 'index.phtml', $args);
 });
 
-// Authenticate route.
+// Authenticate api.
 $app->post('/api/auth', 'App\Controllers\AuthController:auth');
 
 // Lista de liguagens
-$app->get('/api/linguagens/list/[{id_liguagem}]','App\Controllers\LinguagensController:list');
+$app->group('/api/linguagens', function() {
+    $this->get('/list[/{id_liguagem}]','App\Controllers\LinguagensController:list');
+    $this->post('/save','App\Controllers\LinguagensController:save');
+    $this->delete('/delete/{id_liguagem}','App\Controllers\LinguagensController:delete');
+});
