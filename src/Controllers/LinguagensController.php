@@ -118,7 +118,7 @@ class LinguagensController {
                     $db = null;
                 }
                 return $response->withJson(["code"=>200,
-                                            "data"=>   $sql,
+                                            "data"=> 'OK',
                                             "mensage"=>"Registro salvo com sucesso!",
                                             "args" => $args
                                             ]);

@@ -31,3 +31,8 @@ $app->group('/api/frameworks', function() {
     $this->post('/save/{type}','App\Controllers\FrameworksController:save');
     $this->delete('/delete/{id_liguagem}','App\Controllers\FrameworksController:delete');
 });
+
+// rota Tipos
+$app->group('/api/tipos', function() {
+    $this->get('/list[/{id_tipos}]','App\Controllers\TiposController:list');
+});
