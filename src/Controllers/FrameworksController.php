@@ -8,6 +8,8 @@ use Slim\Http\Response;
 
 use \Firebase\JWT\JWT;
 
+use \App\Helpers\ImgBase64;
+
 class FrameworksController {
     
     protected $container;
@@ -107,7 +109,13 @@ class FrameworksController {
                 $body = $request->getParsedBody();
                 // Insert
                 if($args['type'] == 'add'){
+                    // upload de imagem
+                    $imgResult = ImgBase64::saveBase64Image($body['tx_urlimg']['value'], $body['tx_urlimg']['nameFile'],$_SERVER['DOCUMENT_ROOT'].'/uploads/frameworks/');
+                    
+                    $body['tx_urlimg'] = '/uploads/frameworks/'.$imgResult;
+                    
                     $fieldNames = implode(',', array_keys($body));
+                 
                     foreach ($body as $key => $value) {
                         $fieldValues .= ":$key,";
                     }                
@@ -137,6 +145,7 @@ class FrameworksController {
                     $data = $stmt->execute();
                     $db = null;
                 }
+         
                 return $response->withJson(["code"=>200,
                                             "data"=>  'OK',
                                             "mensage"=>"Registro salvo com sucesso!",
