@@ -28,9 +28,8 @@ class AuthController {
         $stmt->execute();
         $current_user = $stmt->fetchObject();
         $db = null;
-    
-        if (!isset($current_user)) {
-            echo json_encode("No user found");
+        if (!$current_user) {
+            return $response->withJson(["code"=>401,"data"=>$current_user,"mensage"=>"Não autorizado: acesso negado devido a credenciais inválidas."]);die;
         } else {
             // Find a corresponding token.
             $sql = "SELECT * FROM tb_tokens

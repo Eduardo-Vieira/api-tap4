@@ -46,7 +46,9 @@ class FrameworksController {
                             WHERE tb_frameworks.id_liguagem = tb_liguagens.id_liguagem
                             AND tb_frameworks.id_tipos= tb_tipos.id_tipos";
 
-                   ($args['tb_frameworks.id_frameworks'])? $sql .= " AND tb_frameworks.id_frameworks = :id_frameworks":false;
+                   ($args['id_frameworks'])? $sql .= " AND tb_frameworks.id_frameworks = :id_frameworks":false;
+                   $sql .= " order by tb_frameworks.id_frameworks;";
+                   
                    $db = $this->container->db;
                    $stmt = $db->prepare($sql);                       
                    if(count($args) > 0){

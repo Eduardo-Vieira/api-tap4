@@ -27,9 +27,9 @@ $app->group('/api/linguagens', function() {
 
 // rota frameworks
 $app->group('/api/frameworks', function() {
-    $this->get('/list[/{id_liguagem}]','App\Controllers\FrameworksController:list');
+    $this->get('/list[/{id_frameworks}]','App\Controllers\FrameworksController:list');
     $this->post('/save/{type}','App\Controllers\FrameworksController:save');
-    $this->delete('/delete/{id_liguagem}','App\Controllers\FrameworksController:delete');
+    $this->delete('/delete/{id_frameworks}','App\Controllers\FrameworksController:delete');
 });
 
 // rota Tipos
