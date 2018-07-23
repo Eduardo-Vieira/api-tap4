@@ -27,11 +27,26 @@ class FrameworksController {
         }
         if (isset($decoded)) {
             try {            
-                   $sql = "SELECT id_frameworks, id_liguagem, tx_nome, tx_site, tx_ano, tx_criador, 
-                                  tx_versao, id_tipos, tx_opniao, tx_pros, tx_contra, tx_urlimg 
-                            FROM tb_frameworks WHERE 1=1";
+                   $sql = "SELECT 
+                                tb_frameworks.id_frameworks, 
+                                tb_frameworks.id_liguagem,
+                                tb_liguagens.tx_liguagem,
+                                tb_frameworks.tx_nome, 
+                                tb_frameworks.tx_site, 
+                                tb_frameworks.tx_ano, 
+                                tb_frameworks.tx_criador, 
+                                tb_frameworks.tx_versao, 
+                                tb_frameworks.id_tipos, 
+                                tb_tipos.tx_tipos,
+                                tb_frameworks.tx_opniao,
+                                tb_frameworks.tx_pros, 
+                                tb_frameworks.tx_contra, 
+                                tb_frameworks.tx_urlimg
+                            FROM tb_frameworks,tb_liguagens,tb_tipos
+                            WHERE tb_frameworks.id_liguagem = tb_liguagens.id_liguagem
+                            AND tb_frameworks.id_tipos= tb_tipos.id_tipos";
 
-                   ($args['id_frameworks'])? $sql .= " AND id_frameworks = :id_frameworks":false;
+                   ($args['tb_frameworks.id_frameworks'])? $sql .= " AND tb_frameworks.id_frameworks = :id_frameworks":false;
                    $db = $this->container->db;
                    $stmt = $db->prepare($sql);                       
                    if(count($args) > 0){
