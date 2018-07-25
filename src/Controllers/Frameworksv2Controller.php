@@ -14,13 +14,14 @@ class Frameworksv2Controller
         Container $container
     ) {
         $this->container = $container;
+        //ORM open instance db
+        $container->ORM;
     }
 
     public function index(Request $request, Response $response, $args)
     {
-        $ORM = $this->container->ORM;
 
-        $data = $ORM->table('tb_frameworks')->where('id_frameworks','=',$args['id_frameworks'])->get();
+        $data = \App\Models\Frameworks::where('id_frameworks', $args['id_frameworks'])->firstOrFail();
 
         return $response->withJson(["code"=>200,
                                     "data"=>  $data,
