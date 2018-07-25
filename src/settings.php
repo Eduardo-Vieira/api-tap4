@@ -22,6 +22,20 @@ return [
             'name' => 'mydb',
             'user' => 'eduardo',
             'password' => 'password'
+        ],
+
+        // Slim Settings
+        'determineRouteBeforeAppMiddleware' => false,
+        'displayErrorDetails' => true,
+        'dbORM' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'database' => 'mydb',
+            'username' => 'eduardo',
+            'password' => 'password',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
         ]
     ],
 ];

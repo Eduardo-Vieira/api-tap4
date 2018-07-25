@@ -19,7 +19,7 @@ $app->add(new Tuupola\Middleware\JwtAuthentication([
     "path" => ["/api", "/admin"],
     "header" => "Authorization",
     "regexp" => "/(.*)/",
-    "ignore" => ["/api/auth", "/admin/ping"],
+    "ignore" => ["/api/auth", "/api/v2"],
     "secret" => "testeTap4api",
     "error" => function ($response, $arguments) {
         $data["status"] = "error";

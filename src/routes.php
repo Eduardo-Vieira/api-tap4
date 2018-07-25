@@ -36,3 +36,8 @@ $app->group('/api/frameworks', function() {
 $app->group('/api/tipos', function() {
     $this->get('/list[/{id_tipos}]','App\Controllers\TiposController:list');
 });
+
+// rota frameworks com ORM  Eloquent
+$app->group('/api/v2', function() {
+    $this->get('/frameworksv2[/{id_frameworks}]','App\Controllers\Frameworksv2Controller:index');
+});
