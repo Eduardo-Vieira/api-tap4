@@ -3,3 +3,5 @@
 [2018-07-21 00:37:39] slim-app.INFO: Slim-Skeleton '/api/auth' route [] {"uid":"8eeac3b"}
 [2018-07-21 00:38:35] slim-app.INFO: Slim-Skeleton '/api/auth' route [] {"uid":"e434803"}
 [2018-07-21 00:44:15] slim-app.INFO: Slim-Skeleton '/api/auth' route [] {"uid":"668ae03"}
+[2018-07-31 13:32:53] slim-app.INFO: Slim-Skeleton '/' route [] {"uid":"e8ded63"}
+[2018-07-31 14:52:31] slim-app.INFO: Slim-Skeleton '/' route [] {"uid":"467f3b3"}

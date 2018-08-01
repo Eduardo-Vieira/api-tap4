@@ -6,11 +6,11 @@ use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-use \Firebase\JWT\JWT;
+
 
 use \App\Helpers\ImgBase64;
 
-class FrameworksController {
+class FrameworksController extends \App\Helpers\Auth {
     
     protected $container;
 
@@ -20,13 +20,9 @@ class FrameworksController {
     }
 
     public function list($request, $response, $args) {
-        $jwt = $request->getHeaders();
-       
-        try {
-            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
-        } catch (UnexpectedValueException $e) {
-            return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
-        }
+
+        $decoded = $this->auth($request->getHeaders());
+
         if (isset($decoded)) {
             try {            
                    $sql = "SELECT 
@@ -71,12 +67,9 @@ class FrameworksController {
     }
     
     public function delete($request, $response, $args) {
-        $jwt = $request->getHeaders();       
-        try {
-            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
-        } catch (UnexpectedValueException $e) {
-            return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
-        }
+        
+        $decoded = $this->auth($request->getHeaders());
+
         if (isset($decoded)) {
             try {
                 $sql = "DELETE FROM tb_frameworks WHERE id_frameworks = :id_frameworks";
@@ -98,12 +91,9 @@ class FrameworksController {
     }
 
     public function save($request, $response, $args) {
-        $jwt = $request->getHeaders();       
-        try {
-            $decoded = JWT::decode($jwt['HTTP_AUTHORIZATION'][0], $this->container->key, array('HS256'));
-        } catch (UnexpectedValueException $e) {
-            return $response->withJson(["code"=>500,"data"=>["error"=>$e->getMessage()],"mensage"=>"Erro token"]);
-        }
+        
+        $decoded = $this->auth($request->getHeaders());
+
         if (isset($decoded)) {
             try {
                 $body = $request->getParsedBody();
